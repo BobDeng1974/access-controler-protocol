@@ -18,6 +18,11 @@ int IoManager::RecvData(char *buf, int len)
 	}
 	return ProcessBuffer();
 }
+
+/*
+如果数据头字节不是协议包头就直接
+丢掉，
+*/
 int IoManager::ProcessBuffer(void)
 {
 	if( buffer.Length() < 1 )
@@ -34,13 +39,24 @@ int IoManager::ProcessBuffer(void)
 		buffer.Pop(len);
 	}
 }
+
+/*
+ Socket 接收的数据放在buffer里，
+ 检测到缓冲区的数据有一个有校包
+ 就直接取出，
+*/
 int IoManager::GetPacket(void)
 {
 	PacketAccess *p = buffer.Data();
 	
 	if( p->CheckSelf() )
 	{
+		//
 		PostPacet(*p);
+	}
+	else
+	{
+		return 0;
 	}
 	return p->GetPacketLength();
 }

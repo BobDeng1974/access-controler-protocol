@@ -1,24 +1,14 @@
 #ifndef __TCP_CLIENT_H__
 #define __TCP_CLIENT_H__
+#include "socket-base.h"
 
-class TcpClient
+class TcpClient : public SocketBase
 {
-private:
-	int fd;
-
 public:
-	TcpClient(void);	
-	~TcpClient(void);
-
-public:
-	void Init(void);
-	void Cleanup(void);
-
-public:
-	int Send(char *buf, int len);
-	int Recv(char *buf, int len);
+	bool Open(void);
 	bool Connect(const char *ip, int port);
-	bool Block(bool block);
+	int Send(const char *buf, int len);
+	int Recv(char *buf, int len);
 };
 
 
